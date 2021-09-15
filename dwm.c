@@ -2946,6 +2946,7 @@ void view(const Arg *arg) {
   arrange(selmon);
 }
 
+// Add motithrads to animation
 void viewtoleft(const Arg *arg) {
   Monitor *m = selmon;
   if (m->tagset[m->seltags] != 1) {
