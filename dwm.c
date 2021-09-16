@@ -28,6 +28,7 @@
 #include <X11/keysym.h>
 #include <errno.h>
 #include <locale.h>
+#include <pthread.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -1069,7 +1070,7 @@ void drawbar(Monitor *m) {
   if (m == selmon) { /* status is only drawn on selected monitor */
     drw_setscheme(drw, scheme[SchemeShow]);
     tw = TEXTW(stext) - lrpad / 2 + 2; /* 2px right padding */
-    drw_text(drw, m->ww - tw - stw, 0, tw, bh, lrpad / 2 - 2, stext, 0);
+    drw_text(drw, m->ww - tw - stw, 0, tw, bh - 5, lrpad / 2 - 2, stext, 0);
   }
 
   resizebarwin(m);
