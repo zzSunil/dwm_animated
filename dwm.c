@@ -556,45 +556,81 @@ void animatemoticlient(int x, int y, int frames, int resetpos) {
   }
 }
 
+struct dataFclt {
+  pthread_t thread_id;
+  Display *dpy;
+  Window win;
+  int des;
+  int y;
+  Client *c;
+};
+
+void *MoveWindow(void *arg) {
+
+  struct dataFclt *data = arg;
+  XMoveWindow(data->dpy, data->win, data->des, data->y);
+  // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
+  configure(data->c);
+  XSync(data->dpy, False);
+}
+
 void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
                      int oldxftag2[10], int oldyftag1[10], int oldyftag2[10],
                      int oldwftag1[10], int oldwftag2[10], int oldhftag1[10],
                      int oldhftag2[10], Client *ct1[10], Client *ct2[10],
                      int frames1[10], int frames2[10]) {
-  int delay = 1000;
-  int time = 1;
   int k;
+  int time = 1;
+  int delay = 1000;
   int des;
   int bais = 30;
+  int nThreads = 20;
+  int h = 0;
+
+  struct dataFclt *datas = calloc(nThreads, sizeof(*datas));
 
   while (time < Maxframes) {
+    h = 0;
     for (k = 0; k < 10; k++) {
-      if (ct1[k] != NULL) {
-        if (time <= frames1[k]) {
-          des = oldxftag1[k] + derx * time + bais;
-          if (des > 1920)
-            des = 1920;
-          XMoveWindow(dpy, ct1[k]->win, des, oldyftag1[k]);
-          // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
-          configure(ct1[k]);
-          XSync(dpy, False);
-        }
+      if (ct1[k] != NULL && time <= frames1[k]) {
+        des = oldxftag1[k] + derx * time + bais;
+        if (des > 1920)
+          des = 1920;
+        // MoveWindow(dpy, ct1[k]->win, des, oldyftag1[k], ct1[k]);
+        datas[h].c = ct1[k];
+        datas[h].dpy = dpy;
+        datas[h].win = ct1[k]->win;
+        datas[h].des = des;
+        datas[h].y = oldyftag1[k];
+        h++;
       }
-      if (ct2[k] != NULL) {
-        if (time <= frames2[k]) {
-          des = -1920 + oldxftag2[k] + derx * time;
-          if (des < 0 - oldwftag2[k])
-            des = 0 - oldwftag2[k];
-          XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
-          // resize(ct2[k], des, oldyftag2[k], oldwftag2[k], oldhftag2[k], 1);
-          configure(ct2[k]);
-          XSync(dpy, False);
-        }
+
+      if (ct2[k] != NULL && time <= frames2[k]) {
+        des = -1920 + oldxftag2[k] + derx * time;
+        if (des < 0 - oldwftag2[k])
+          des = 0 - oldwftag2[k];
+        // MoveWindow(dpy, ct2[k]->win, des, oldyftag2[k], ct2[k]);
+        datas[h].dpy = dpy;
+        datas[h].c = ct2[k];
+        datas[h].win = ct2[k]->win;
+        datas[h].des = des;
+        datas[h].y = oldyftag2[k];
+        h++;
       }
     }
+
+    for (int i = 0; i < h; i++) {
+      pthread_create(&datas[i].thread_id, NULL, &MoveWindow, &datas[i]);
+    }
+
+    for (int i = 0; i < h; i++) {
+      pthread_join(datas[i].thread_id, NULL);
+    }
+
     time++;
     usleep(delay);
   }
+  free(datas);
 }
 
 void animateviewright(int derx, int Maxframes, int oldxftag1[10],
@@ -607,35 +643,52 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
   int delay = 1000;
   int des;
   int bais = 30;
+  int nThreads = 20;
+  int h = 0;
+
+  struct dataFclt *datas = calloc(nThreads, sizeof(*datas));
 
   while (time < Maxframes) {
+    h = 0;
     for (k = 0; k < 10; k++) {
-      if (ct1[k] != NULL) {
-        if (time <= frames1[k]) {
-          des = oldxftag1[k] - derx * time - bais;
-          if (des < 0 - oldwftag1[k])
-            des = 0 - oldwftag1[k];
-          XMoveWindow(dpy, ct1[k]->win, des, oldyftag1[k]);
-          // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
-          configure(ct1[k]);
-          XSync(dpy, False);
-        }
+      if (ct1[k] != NULL && time <= frames1[k]) {
+        des = oldxftag1[k] - derx * time - bais;
+        if (des < 0 - oldwftag1[k])
+          des = 0 - oldwftag1[k];
+        // MoveWindow(dpy, ct1[k]->win, des, oldyftag1[k], ct1[k]);
+        datas[h].c = ct1[k];
+        datas[h].dpy = dpy;
+        datas[h].win = ct1[k]->win;
+        datas[h].des = des;
+        datas[h].y = oldyftag1[k];
+        h++;
       }
-      if (ct2[k] != NULL) {
-        if (time <= frames2[k]) {
-          des = 1920 + oldxftag2[k] - derx * time;
-          if (des > 1920)
-            des = 1920;
-          XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
-          // resize(ct2[k], des, oldyftag2[k], oldwftag2[k], oldhftag2[k], 1);
-          configure(ct2[k]);
-          XSync(dpy, False);
-        }
+
+      if (ct2[k] != NULL && time <= frames2[k]) {
+        des = 1920 + oldxftag2[k] - derx * time;
+        if (des > 1920)
+          des = 1920;
+        // MoveWindow(dpy, ct2[k]->win, des, oldyftag2[k], ct2[k]);
+        datas[h].dpy = dpy;
+        datas[h].c = ct2[k];
+        datas[h].win = ct2[k]->win;
+        datas[h].des = des;
+        datas[h].y = oldyftag2[k];
+        h++;
       }
+    }
+
+    for (int i = 0; i < h; i++) {
+      pthread_create(&datas[i].thread_id, NULL, &MoveWindow, &datas[i]);
+    }
+
+    for (int i = 0; i < h; i++) {
+      pthread_join(datas[i].thread_id, NULL);
     }
     time++;
     usleep(delay);
   }
+  free(datas);
 }
 
 void animateclient(Client *c, int x, int y, int w, int h, int frames,
