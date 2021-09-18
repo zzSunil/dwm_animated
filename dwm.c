@@ -261,6 +261,7 @@ static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
+static void toggleMonitor(const Arg *arg);
 static void pop(Client *);
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
@@ -375,8 +376,6 @@ static Cur *cursor[CurLast];
 static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
-static Monitor *mons, *selmon;
-static Window root, wmcheckwin;
 
 static int useargb = 0;
 static Visual *visual;
@@ -1174,11 +1173,11 @@ void enternotify(XEvent *e) {
     return;
   c = wintoclient(ev->window);
   m = c ? c->mon : wintomon(ev->window);
-  if (m != selmon) {
-    unfocus(selmon->sel, 1);
-    selmon = m;
-  } else if (!c || c == selmon->sel)
-    return;
+  /* if (m != selmon) { */
+  /*   unfocus(selmon->sel, 1); */
+  /*   selmon = m; */
+  /* } else if (!c || c == selmon->sel) */
+  /*   return; */
   focus(c);
 }
 
@@ -1443,6 +1442,18 @@ void keypress(XEvent *e) {
       keys[i].func(&(keys[i].arg));
 }
 
+void toggleMonitor(const Arg *arg) {
+  Monitor *m;
+  for (m = mons; m; m = m->next) {
+    if (m != selmon) {
+      unfocus(selmon->sel, 0);
+      selmon = m;
+      focus(NULL);
+      break;
+    }
+  }
+}
+
 void killclient(const Arg *arg) {
   if (!selmon->sel)
     return;
@@ -1585,11 +1596,11 @@ void motionnotify(XEvent *e) {
 
   if (ev->window != root)
     return;
-  if ((m = recttomon(ev->x_root, ev->y_root, 1, 1)) != mon && mon) {
-    unfocus(selmon->sel, 1);
-    selmon = m;
-    focus(NULL);
-  }
+  /* if ((m = recttomon(ev->x_root, ev->y_root, 1, 1)) != mon && mon) { */
+  /*   unfocus(selmon->sel, 1); */
+  /*   selmon = m; */
+  /*   focus(NULL); */
+  /* } */
   mon = m;
 }
 
@@ -1644,11 +1655,11 @@ void movemouse(const Arg *arg) {
     }
   } while (ev.type != ButtonRelease);
   XUngrabPointer(dpy, CurrentTime);
-  if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
-    sendmon(c, m);
-    selmon = m;
-    focus(NULL);
-  }
+  /* if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) { */
+  /*   sendmon(c, m); */
+  /*   selmon = m; */
+  /*   focus(NULL); */
+  /* } */
 }
 
 Client *nexttiled(Client *c) {
@@ -1837,11 +1848,11 @@ void resizemouse(const Arg *arg) {
   XUngrabPointer(dpy, CurrentTime);
   while (XCheckMaskEvent(dpy, EnterWindowMask, &ev))
     ;
-  if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
-    sendmon(c, m);
-    selmon = m;
-    focus(NULL);
-  }
+  /* if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) { */
+  /*   sendmon(c, m); */
+  /*   selmon = m; */
+  /*   focus(NULL); */
+  /* } */
 }
 
 void resizerequest(XEvent *e) {
