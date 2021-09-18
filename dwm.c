@@ -2948,6 +2948,7 @@ void view(const Arg *arg) {
 }
 
 struct clientData {
+  int wich;
   pthread_t thread_id;
   Client *c;
   int w;
@@ -2957,7 +2958,43 @@ struct clientData {
   int oldy;
 };
 
-void *MoveWindow(void *arg) { struct clientData *data = arg; }
+void *MoveWindow(void *arg) {
+  struct clientData *cltdata = arg;
+  int k;
+  int time = 1;
+  int delay = 10000;
+  int derx = 30;
+  int des;
+  int bais = 30;
+
+  // while (time < cltdata->frames) {
+  if (cltdata->wich == 1) {
+    des = cltdata->oldx - derx * time - bais;
+    if (des < 0 - cltdata->w)
+      des = 0 - cltdata->w;
+  } else if (cltdata->wich == 2) {
+    des = 1920 + cltdata->oldx - derx * time;
+    if (des > 1920)
+      des = 1920;
+  } else if (cltdata->wich == 3) {
+    des = cltdata->oldx + derx * time + bais;
+    if (des > 1920)
+      des = 1920;
+  } else {
+    des = -1920 + cltdata->oldx + derx * time;
+    if (des < 0 - cltdata->w)
+      des = 0 - cltdata->w;
+  }
+  XMoveWindow(dpy, cltdata->c->win, des, cltdata->oldy);
+  //        resize(cltdata->c, des, cltdata->oldy, cltdata->w, cltdata->h,
+  //        1);
+  configure(cltdata->c);
+  XSync(dpy, False);
+  time++;
+  usleep(delay);
+  //}
+  return 0;
+}
 
 // Add motithrads to animation
 void viewtoleft(const Arg *arg) {
@@ -2967,21 +3004,11 @@ void viewtoleft(const Arg *arg) {
   struct clientData *ct2 = calloc(10, sizeof(*ct2));
 
   if (m->tagset[m->seltags] != 1 << 8) {
-    /* Client *ct1[10]; */
-    /* Client *ct2[10]; */
     int j;
     for (j = 0; j < 10; j++)
       ct1[j].c = NULL;
     for (j = 0; j < 10; j++)
       ct2[j].c = NULL;
-    /* int oldxftag1[10]; */
-    /* int oldyftag1[10]; */
-    /* int oldwftag1[10]; */
-    /* int oldhftag1[10]; */
-    /* int oldxftag2[10]; */
-    /* int oldyftag2[10]; */
-    /* int oldwftag2[10]; */
-    /* int oldhftag2[10]; */
     int derx = 30;
     Client *cl;
     int i = 0;
@@ -2991,6 +3018,7 @@ void viewtoleft(const Arg *arg) {
 
     for (cl = m->clients; cl; cl = cl->next) {
       if (cl->tags == m->tagset[m->seltags] && !HIDDEN(cl)) {
+        ct1[i].wich = 3;
         ct1[i].c = cl;
         ct1[i].oldx = cl->x;
         ct1[i].oldy = cl->y;
@@ -3000,6 +3028,7 @@ void viewtoleft(const Arg *arg) {
         ct1[i].frames = (dis / derx);
         i++;
       } else if (cl->tags == m->tagset[m->seltags] << 1 && !HIDDEN(cl)) {
+        ct2[l].wich = 4;
         ct2[l].c = cl;
         ct2[l].oldx = cl->x;
         ct2[l].oldy = cl->y;
@@ -3011,25 +3040,21 @@ void viewtoleft(const Arg *arg) {
       }
     }
 
-    for (int cnt = 0; cnt < i; ++cnt) {
-      pthread_create(&ct1[cnt].thread_id, NULL, MoveWindow, &ct1[cnt]);
+    for (int cnt = 0; cnt < i; cnt++) {
+      pthread_create(&ct1[cnt].thread_id, NULL, &MoveWindow, &ct1[cnt]);
     }
 
-    for (int cnt = 0; cnt < l; ++cnt) {
-      pthread_create(&ct2[cnt].thread_id, NULL, MoveWindow, &ct2[cnt]);
+    for (int cnt = 0; cnt < l; cnt++) {
+      pthread_create(&ct2[cnt].thread_id, NULL, &MoveWindow, &ct2[cnt]);
     }
     // TODO: join threads
-    for (int cnt = 0; cnt < i; ++cnt) {
+    for (int cnt = 0; cnt < i; cnt++) {
       pthread_join(ct1[cnt].thread_id, NULL);
     }
 
-    for (int cnt = 0; cnt < l; ++cnt) {
+    for (int cnt = 0; cnt < l; cnt++) {
       pthread_join(ct2[cnt].thread_id, NULL);
     }
-    /* animateviewright(derx, Maxframes, oldxftag1, oldxftag2, oldyftag1, */
-    /*                  oldyftag2, oldwftag1, oldwftag2, oldhftag1, oldhftag2,
-     * ct1, */
-    /*                  ct2, frames1, frames2); */
     if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1 &&
         selmon->tagset[selmon->seltags] > 1) {
       selmon->seltags ^= 1; /* toggle sel tagset */
@@ -3041,30 +3066,11 @@ void viewtoleft(const Arg *arg) {
     for (int n = 0; ct1[n].c; n++) {
       ct1[n].c->x = ct1[n].oldx;
       ct1[n].c->y = ct1[n].oldy;
-      ct1[n].c->w = ct1[n].w;
-      ct1[n].c->h = ct1[n].h;
     }
   }
+  free(ct1);
+  free(ct2);
 }
-
-/*
-void toright(const Arg *arg) {
-  Client *c;
-  for (c = selmon->clients; c; c = c->next)
-    if (c->tags == selmon->tagset[selmon->seltags] + 1) {
-      c->x = 1921;
-      animateclient(c, 10, c->y, c->w, c->h, 40, 0);
-    }
-  if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1 &&
-      selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
-    selmon->seltags ^= 1;
-    selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] <<
-1; focus(NULL); arrange(selmon);
-  }
-}
-
-*/
-// Add motithrads to animation
 
 void viewtoright(const Arg *arg) {
   Monitor *m = selmon;
@@ -3073,21 +3079,11 @@ void viewtoright(const Arg *arg) {
   struct clientData *ct2 = calloc(10, sizeof(*ct2));
 
   if (m->tagset[m->seltags] != 1 << 8) {
-    /* Client *ct1[10]; */
-    /* Client *ct2[10]; */
     int j;
     for (j = 0; j < 10; j++)
       ct1[j].c = NULL;
     for (j = 0; j < 10; j++)
       ct2[j].c = NULL;
-    /* int oldxftag1[10]; */
-    /* int oldyftag1[10]; */
-    /* int oldwftag1[10]; */
-    /* int oldhftag1[10]; */
-    /* int oldxftag2[10]; */
-    /* int oldyftag2[10]; */
-    /* int oldwftag2[10]; */
-    /* int oldhftag2[10]; */
     int derx = 30;
     Client *cl;
     int i = 0;
@@ -3097,6 +3093,7 @@ void viewtoright(const Arg *arg) {
 
     for (cl = m->clients; cl; cl = cl->next) {
       if (cl->tags == m->tagset[m->seltags] && !HIDDEN(cl)) {
+        ct1[i].wich = 1;
         ct1[i].c = cl;
         ct1[i].oldx = cl->x;
         ct1[i].oldy = cl->y;
@@ -3106,6 +3103,7 @@ void viewtoright(const Arg *arg) {
         ct1[i].frames = (dis / derx);
         i++;
       } else if (cl->tags == m->tagset[m->seltags] << 1 && !HIDDEN(cl)) {
+        ct2[l].wich = 2;
         ct2[l].c = cl;
         ct2[l].oldx = cl->x;
         ct2[l].oldy = cl->y;
@@ -3117,25 +3115,21 @@ void viewtoright(const Arg *arg) {
       }
     }
 
-    for (int cnt = 0; cnt < i; ++cnt) {
-      pthread_create(&ct1[cnt].thread_id, NULL, MoveWindow, &ct1[cnt]);
+    for (int cnt = 0; cnt < i; cnt++) {
+      pthread_create(&ct1[cnt].thread_id, NULL, &MoveWindow, &ct1[cnt]);
     }
 
-    for (int cnt = 0; cnt < l; ++cnt) {
-      pthread_create(&ct2[cnt].thread_id, NULL, MoveWindow, &ct2[cnt]);
+    for (int cnt = 0; cnt < l; cnt++) {
+      pthread_create(&ct2[cnt].thread_id, NULL, &MoveWindow, &ct2[cnt]);
     }
-    // TODO: join threads
-    for (int cnt = 0; cnt < i; ++cnt) {
+
+    for (int cnt = 0; cnt < i; cnt++) {
       pthread_join(ct1[cnt].thread_id, NULL);
     }
 
-    for (int cnt = 0; cnt < l; ++cnt) {
+    for (int cnt = 0; cnt < l; cnt++) {
       pthread_join(ct2[cnt].thread_id, NULL);
     }
-    /* animateviewright(derx, Maxframes, oldxftag1, oldxftag2, oldyftag1, */
-    /*                  oldyftag2, oldwftag1, oldwftag2, oldhftag1, oldhftag2,
-     * ct1, */
-    /*                  ct2, frames1, frames2); */
     if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1 &&
         selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
       selmon->seltags ^= 1;
@@ -3147,10 +3141,10 @@ void viewtoright(const Arg *arg) {
     for (int n = 0; ct1[n].c; n++) {
       ct1[n].c->x = ct1[n].oldx;
       ct1[n].c->y = ct1[n].oldy;
-      ct1[n].c->w = ct1[n].w;
-      ct1[n].c->h = ct1[n].h;
     }
   }
+  free(ct1);
+  free(ct2);
 }
 
 Client *wintoclient(Window w) {
