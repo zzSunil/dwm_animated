@@ -3226,6 +3226,12 @@ void xinitvisual() {
   }
 }
 
+void toggleMonitor(const Arg *arg) {
+  Monitor *m;
+  for (m = mons; m; m = m->next) {
+  }
+}
+
 void zoom(const Arg *arg) {
   Client *c = selmon->sel;
 
