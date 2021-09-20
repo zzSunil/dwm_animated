@@ -262,6 +262,7 @@ static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
 static void pop(Client *);
+static void toggleMonitor(const Arg *arg);
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
@@ -1070,7 +1071,7 @@ void drawbar(Monitor *m) {
   if (m == selmon) { /* status is only drawn on selected monitor */
     drw_setscheme(drw, scheme[SchemeShow]);
     tw = TEXTW(stext) - lrpad / 2 + 2; /* 2px right padding */
-    drw_text(drw, m->ww - tw - stw, 0, tw, bh - 5, lrpad / 2 - 2, stext, 0);
+    drw_text(drw, m->ww - tw - stw, 0, tw, bh, lrpad / 2 - 2, stext, 0);
   }
 
   resizebarwin(m);
@@ -3229,6 +3230,12 @@ void xinitvisual() {
 void toggleMonitor(const Arg *arg) {
   Monitor *m;
   for (m = mons; m; m = m->next) {
+    if (m != selmon) {
+      unfocus(selmon->sel, 1);
+      selmon = m;
+      focus(NULL);
+      break;
+    }
   }
 }
 
