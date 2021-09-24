@@ -24,7 +24,7 @@ static const char *fonts[]     = {
                                   "monospace:size=19:antialias=true:autohint=true",
                                   "Source Code Pro:size=19:antialias=true:autohint=true"
 																	};
-static const char dmenufont[]       = "SauceCodePro Nerd Font Mono:size=13";
+static const char dmenufont[]       = "SauceCodePro Nerd Font Mono:size=15";
 //static const char *fonts[]          = { "monospace:size=16" };
 //static const char dmenufont[]       = "monospace:size=13";
 static const char col_gray1[]       = "#3c3836";

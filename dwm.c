@@ -1087,7 +1087,7 @@ void drawbar(Monitor *m) {
     w = TEXTW(tags[i]);
     drw_setscheme(
         drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-    drw_text(drw, x, 0, w, bh * 1.1, lrpad / 2, tags[i], urg & 1 << i);
+    drw_text(drw, x, 0, w, bh * 1, lrpad / 2, tags[i], urg & 1 << i);
     if (occ & 1 << i) {
       drw_setscheme(drw, scheme[SchemeSel2]);
       drw_rect(drw, x + boxw, 3, w - (2 * boxw + 1), boxw / 2,
@@ -1095,7 +1095,7 @@ void drawbar(Monitor *m) {
                urg & 1 << i);
       if (m != selmon || !selmon->sel || !(selmon->sel->tags & 1 << i)) {
         drw_setscheme(drw, scheme[SchemeShow]);
-        drw_text(drw, x, 0, w, bh * 1.1, lrpad / 2, tags[i], urg & 1 << i);
+        drw_text(drw, x, 0, w, bh * 1, lrpad / 2, tags[i], urg & 1 << i);
       }
     }
     x += w;
