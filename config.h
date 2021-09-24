@@ -3,7 +3,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -24,7 +24,7 @@ static const char *fonts[]     = {
                                   "monospace:size=19:antialias=true:autohint=true",
                                   "Source Code Pro:size=19:antialias=true:autohint=true"
 																	};
-static const char dmenufont[]       = "SauceCodePro Nerd Font Mono:size=16";
+static const char dmenufont[]       = "SauceCodePro Nerd Font Mono:size=13";
 //static const char *fonts[]          = { "monospace:size=16" };
 //static const char dmenufont[]       = "monospace:size=13";
 static const char col_gray1[]       = "#3c3836";
@@ -67,7 +67,7 @@ static const Rule rules[] = {
 	{ "Emulator",             NULL,       NULL,       0,            1,           0,              -1 },
 	{ "quemu-system-i386",    NULL,       NULL,       0,            1,           0,              -1 },
 	{ "st",                   NULL,       NULL,       0,            0,     	     1,		           -1 },
-	{ "alacritty",            NULL,       NULL,       0,            0,     	     1,		           -1 },
+	{ "st",            NULL,       NULL,       0,            0,     	     1,		           -1 },
 	{ "Gimp",                 NULL,       NULL,       0,            1,           0,              -1 },
 	{ "Firefox",              NULL,       NULL,       1 << 8,       0,           0,              -1 },
 };
@@ -79,8 +79,8 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[ ]",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ " ",      tile },    /* first entry is default */
+	{ " ",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "TTT",      bstack },
 	{ "===",      bstackhoriz },
@@ -102,7 +102,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { "kitty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
 
 static const char scratchpadname[] = "scratchpad";

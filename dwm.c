@@ -3231,7 +3231,7 @@ void toggleMonitor(const Arg *arg) {
   Monitor *m;
   for (m = mons; m; m = m->next) {
     if (m != selmon) {
-      unfocus(selmon->sel, 1);
+      unfocus(selmon->sel, 0);
       selmon = m;
       focus(NULL);
       break;
