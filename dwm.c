@@ -578,7 +578,6 @@ void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
           XMoveWindow(dpy, ct1[k]->win, des, oldyftag1[k]);
           // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
           configure(ct1[k]);
-          XSync(dpy, False);
         }
       }
       if (ct2[k] != NULL) {
@@ -589,10 +588,10 @@ void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
           XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
           // resize(ct2[k], des, oldyftag2[k], oldwftag2[k], oldhftag2[k], 1);
           configure(ct2[k]);
-          XSync(dpy, False);
         }
       }
     }
+    XSync(dpy, False);
     time++;
     usleep(delay);
   }
@@ -619,7 +618,6 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
           XMoveWindow(dpy, ct1[k]->win, des, oldyftag1[k]);
           // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
           configure(ct1[k]);
-          XSync(dpy, False);
         }
       }
       if (ct2[k] != NULL) {
@@ -630,10 +628,10 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
           XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
           // resize(ct2[k], des, oldyftag2[k], oldwftag2[k], oldhftag2[k], 1);
           configure(ct2[k]);
-          XSync(dpy, False);
         }
       }
     }
+    XSync(dpy, False);
     time++;
     usleep(delay);
   }
@@ -1075,10 +1073,13 @@ void drawbar(Monitor *m) {
   }
 
   resizebarwin(m);
+
+  /* draw tag icons */
+
   for (c = m->clients; c; c = c->next) {
     if (ISVISIBLE(c))
       n++;
-    occ |= c->tags;
+    occ |= c->tags; // occ act as contains MASK
     if (c->isurgent)
       urg |= c->tags;
   }
@@ -1100,9 +1101,15 @@ void drawbar(Monitor *m) {
     }
     x += w;
   }
+  /* draw layout symble */
+
   w = blw = TEXTW(m->ltsymbol);
   drw_setscheme(drw, scheme[SchemeShow]);
   x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+
+  /* draw middle app name bar */
+
+  // TODO:add icon to app bar
 
   if ((w = m->ww - tw - stw - x) > bh) {
     if (n > 0) {
@@ -1849,7 +1856,8 @@ void resizerequest(XEvent *e) {
   XResizeRequestEvent *ev = &e->xresizerequest;
   Client *i;
 
-  if ((i = wintosystrayicon(ev->window))) {
+  if ((i = wintosystrayicon(ev->window))) { // this if statement is checking is
+                                            // there any systrayicon
     updatesystrayicongeom(i, ev->width, ev->height);
     resizebarwin(selmon);
     updatesystray();
@@ -2755,7 +2763,7 @@ void updatesizehints(Client *c) {
 
 void updatestatus(void) {
   if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-    strcpy(stext, "dwm-" VERSION);
+    strcpy(stext, "");
   drawbar(selmon);
   updatesystray();
 }
@@ -3125,7 +3133,7 @@ Client *wintoclient(Window w) {
   return NULL;
 }
 
-Client *wintosystrayicon(Window w) {
+Client *wintosystrayicon(Window w) { // find window icon
   Client *i = NULL;
 
   if (!showsystray || !w)
