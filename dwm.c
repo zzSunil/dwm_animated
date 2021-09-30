@@ -94,6 +94,7 @@ enum {
   NetSupported,
   NetWMName,
   NetWMState,
+  NetWMIcon,
   NetWMCheck,
   NetSystemTray,
   NetSystemTrayOP,
@@ -1115,7 +1116,8 @@ void drawbar(Monitor *m) {
     if (n > 0) {
       int remainder = w % n;
       int tabw = (1.0 / (double)n) * w + 1;
-      for (c = m->clients; c; c = c->next) {
+      for (c = m->clients; c;
+           c = c->next) { // itterate echa clien on selmon to get their name
         if (!ISVISIBLE(c))
           continue;
         if (m->sel == c)
@@ -2147,6 +2149,7 @@ void setup(void) {
       XInternAtom(dpy, "_NET_SYSTEM_TRAY_ORIENTATION_HORZ", False);
   netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
   netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
+  netatom[NetWMIcon] = XInternAtom(dpy, "_NM_WM_ICON", False);
   netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
   netatom[NetWMFullscreen] =
       XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
