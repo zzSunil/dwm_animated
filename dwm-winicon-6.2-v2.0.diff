@@ -69,7 +69,7 @@ index 8fd1ca4..77e321a 100644
  
 +Picture
 +drw_picture_create_resized(Drw *drw, char *src, unsigned int srcw, unsigned int srch, unsigned int dstw, unsigned int dsth) {
-+	Pixmap pm;
++	Pixmap pm;//container of icon 
 +	Picture pic;
 +	GC gc;
 +
