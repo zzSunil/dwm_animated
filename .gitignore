@@ -1,4 +1,4 @@
-dwm *.o
+*.o
 .ccls-cache/
 TODO.md
 
