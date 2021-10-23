@@ -3,7 +3,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 1; /* border pixel of windows */
+static const unsigned int borderpx = 3; /* border pixel of windows */
 static const unsigned int snap = 32;    /* snap pixel */
 static const unsigned int systraypinning =
     0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor
@@ -42,7 +42,7 @@ static const char col_gray4[] = "#d65d0e";
 static const char col_gray5[] = "#504945";
 static const char col_gruvred[] = "#cc241d";
 static const char col_cyan[] = "#282828";
-static const char col_border[] = "#458588";
+static const char col_border[] = "#cc241d";
 static const unsigned int baralpha = 0xff;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3] = {
