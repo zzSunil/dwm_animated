@@ -3,7 +3,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 3; /* border pixel of windows */
+static const unsigned int borderpx = 2; /* border pixel of windows */
 static const unsigned int snap = 32;    /* snap pixel */
 static const unsigned int systraypinning =
     0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor
@@ -52,7 +52,6 @@ static const char *colors[][3] = {
     [SchemeSel] = {col_gray4, col_cyan, col_border},
     [SchemeHid] = {col_cyan, col_gray1, col_gray2},
     [SchemeSel2] = {col_gruvred, col_cyan, col_border},
-
 };
 static const unsigned int alphas[][3] = {
     /*               fg      bg        border     */
