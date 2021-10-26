@@ -28,10 +28,10 @@ static const int topbar = 0;        /* 0 means bottom bar */
 static const Bool viewontag = True; /* Switch view on tag switch */
 static const char *fonts[] = {
     "Nerd Font:size=11:antialias=true:autohint=true",
-    "Hack Nerd Font:size=14:antialias=true:autohint=true",
-    "JoyPixels:size=14:antialias=true:autohint=true",
-    "monospace:size=14:antialias=true:autohint=true",
-    "Source Code Pro:size=14:antialias=true:autohint=true"};
+    "Hack Nerd Font:size=11:antialias=true:autohint=true",
+    "JoyPixels:size=11:antialias=true:autohint=true",
+    "monospace:size=11:antialias=true:autohint=true",
+    "Source Code Pro:size=11:antialias=true:autohint=true"};
 static const char dmenufont[] = "SauceCodePro Nerd Font Mono:size=15";
 // static const char *fonts[]          = { "monospace:size=16" };
 // static const char dmenufont[]       = "monospace:size=13";
