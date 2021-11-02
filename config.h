@@ -33,8 +33,6 @@ static const char *fonts[] = {
     "monospace:size=11:antialias=true:autohint=true",
     "Source Code Pro:size=11:antialias=true:autohint=true"};
 static const char dmenufont[] = "SauceCodePro Nerd Font Mono:size=15";
-// static const char *fonts[]          = { "monospace:size=16" };
-// static const char dmenufont[]       = "monospace:size=13";
 static const char col_gray1[] = "#3c3836";
 static const char col_gray2[] = "#444444";
 static const char col_gray3[] = "#fbf1c7";
@@ -44,7 +42,7 @@ static const char col_gruvred[] = "#cc241d";
 static const char col_cyan[] = "#282828";
 static const char col_border[] = "#cc241d";
 static const unsigned int baralpha = 0xff;
-static const unsigned int borderalpha = OPAQUE;
+static const unsigned int borderalpha = 0xff;
 static const char *colors[][3] = {
     /*               fg         bg         border   */
     [SchemeNorm] = {col_gray5, col_cyan, col_gray2},
