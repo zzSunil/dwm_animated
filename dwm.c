@@ -3101,7 +3101,7 @@ void viewtoleft(const Arg *arg) {
     int oldyftag2[10];
     int oldwftag2[10];
     int oldhftag2[10];
-    int derx = 30;
+    int derx = 50;
     int frames1[10];
     int frames2[10];
     int Maxframes = 0;
@@ -3193,7 +3193,7 @@ void viewtoright(const Arg *arg) {
     int oldyftag2[10];
     int oldwftag2[10];
     int oldhftag2[10];
-    int derx = 30;
+    int derx = 50;
     int frames1[10];
     int frames2[10];
     int Maxframes = 0;
