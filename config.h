@@ -125,7 +125,7 @@ static const char *downvol[] = {"/home/linus/scripts/vol-down.sh", NULL};
 static const char *mutevol[] = {"/home/linus/scripts/vol-toggle.sh", NULL};
 
 static const char *wpcmd[] = {"/home/linus/scripts/wp-change.sh", NULL};
-static const char *sktogglecmd[] = {"/home/linus/scripts/sck-tog.sh", NULL};
+static const char *jgmenu[] = {"/home/linus/scripts/jgmenu.sh", NULL};
 
 static const char *setcolemakcmd[] = {
     "/home/linus/scripts/setxmodmap-colemak.sh", NULL};
@@ -147,7 +147,7 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_t, spawn, {.v = trayercmd}},
     {MODKEY, XK_g, spawn, {.v = neteasecmd}},
     {MODKEY | ShiftMask, XK_p, spawn, {.v = suspendcmd}},
-    {MODKEY | ControlMask, XK_s, spawn, {.v = sktogglecmd}},
+    {MODKEY , XK_j, spawn, {.v = jgmenu}},
     {MODKEY, XK_y, togglescratch, {.v = scratchpadcmd}},
     {0, XF86XK_AudioLowerVolume, spawn, {.v = downvol}},
     {0, XF86XK_AudioMute, spawn, {.v = mutevol}},
