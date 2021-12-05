@@ -575,14 +575,15 @@ void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
   int k;
   int des;
   int bais = 30;
+  Monitor *m = selmon;
 
   while (time < Maxframes) {
     for (k = 0; k < 10; k++) {
       if (ct1[k] != NULL) {
         if (time <= frames1[k]) {
           des = oldxftag1[k] + derx * time + bais;
-          if (des > 1920)
-            des = 1920;
+          if (des > m->mw)
+            des = m->mw;
           XMoveWindow(dpy, ct1[k]->win, des, oldyftag1[k]);
           // resize(ct1[k], des, oldyftag1[k], oldwftag1[k], oldhftag1[k], 1);
           configure(ct1[k]);
@@ -590,7 +591,7 @@ void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
       }
       if (ct2[k] != NULL) {
         if (time <= frames2[k]) {
-          des = -1920 + oldxftag2[k] + derx * time;
+          des = -m->mw + oldxftag2[k] + derx * time;
           if (des < 0 - oldwftag2[k])
             des = 0 - oldwftag2[k];
           XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
@@ -615,6 +616,7 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
   int delay = 1000;
   int des;
   int bais = 30;
+  Monitor *m = selmon;
 
   while (time < Maxframes) {
     for (k = 0; k < 10; k++) {
@@ -630,9 +632,9 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
       }
       if (ct2[k] != NULL) {
         if (time <= frames2[k]) {
-          des = 1920 + oldxftag2[k] - derx * time;
-          if (des > 1920)
-            des = 1920;
+          des = m->mw + oldxftag2[k] - derx * time;
+          if (des > m->mw)
+            des = m->mw;
           XMoveWindow(dpy, ct2[k]->win, des, oldyftag2[k]);
           // resize(ct2[k], des, oldyftag2[k], oldwftag2[k], oldhftag2[k], 1);
           configure(ct2[k]);
@@ -3157,23 +3159,6 @@ void viewtoleft(const Arg *arg) {
   }
 }
 
-/*
-void toright(const Arg *arg) {
-  Client *c;
-  for (c = selmon->clients; c; c = c->next)
-    if (c->tags == selmon->tagset[selmon->seltags] + 1) {
-      c->x = 1921;
-      animateclient(c, 10, c->y, c->w, c->h, 40, 0);
-    }
-  if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1 &&
-      selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
-    selmon->seltags ^= 1;
-    selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] <<
-1; focus(NULL); arrange(selmon);
-  }
-}
-
-*/
 // Add motithrads to animation
 void viewtoright(const Arg *arg) {
   Monitor *m = selmon;
