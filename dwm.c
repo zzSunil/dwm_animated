@@ -117,6 +117,7 @@ enum {
   WMTakeFocus,
   WMLast
 }; /* default atoms */
+
 enum {
   ClkTagBar,
   ClkLtSymbol,
@@ -144,6 +145,7 @@ typedef struct {
 
 typedef struct Monitor Monitor;
 typedef struct Client Client;
+
 struct Client {
   char name[256];
   unsigned int icw, ich;
@@ -280,6 +282,18 @@ static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
+static void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
+                            int oldxftag2[10], int oldyftag1[10],
+                            int oldyftag2[10], int oldwftag1[10],
+                            int oldwftag2[10], int oldhftag1[10],
+                            int oldhftag2[10], Client *ct1[10], Client *ct2[10],
+                            int frames1[10], int frames2[10]);
+static void animateviewright(int derx, int Maxframes, int oldxftag1[10],
+                             int oldxftag2[10], int oldyftag1[10],
+                             int oldyftag2[10], int oldwftag1[10],
+                             int oldwftag2[10], int oldhftag1[10],
+                             int oldhftag2[10], Client *ct1[10],
+                             Client *ct2[10], int frames1[10], int frames2[10]);
 static void rotatestack(const Arg *arg);
 static void run(void);
 static void runAutostart(void);
@@ -536,35 +550,6 @@ double easeOutCubic(double t) {
   return 1 + t * t * t;
 }
 
-void animatemoticlient(int x, int y, int frames, int resetpos) {
-  Client *c = selmon->sel;
-  int width, height;
-  width = c->w;
-  height = c->h;
-
-  int time;
-  int oldx, oldy;
-
-  // prevent oversizing when minimizing/unminimizing
-  if (width > c->mon->mw - (2 * c->bw))
-    width = c->mon->ww - (2 * c->bw);
-
-  if (height > c->mon->wh - (2 * c->bw))
-    height = c->mon->wh - (2 * c->bw);
-
-  time = 1;
-  oldx = c->x;
-  oldy = c->y;
-
-  while (time < frames) {
-    resize(c, oldx + easeOutCubic(((double)time / frames)) * (x - oldx),
-           oldy + easeOutCubic(((double)time / frames)) * (y - oldy), width,
-           height, 1);
-    time++;
-    usleep(10000);
-  }
-}
-
 void animateviewleft(int derx, int Maxframes, int oldxftag1[10],
                      int oldxftag2[10], int oldyftag1[10], int oldyftag2[10],
                      int oldwftag1[10], int oldwftag2[10], int oldhftag1[10],
@@ -611,6 +596,7 @@ void animateviewright(int derx, int Maxframes, int oldxftag1[10],
                       int oldwftag1[10], int oldwftag2[10], int oldhftag1[10],
                       int oldhftag2[10], Client *ct1[10], Client *ct2[10],
                       int frames1[10], int frames2[10]) {
+
   int k;
   int time = 1;
   int delay = 1000;
@@ -1880,6 +1866,13 @@ void resizeclient(Client *c, int x, int y, int w, int h) {
   c->oldh = c->h;
   c->h = wc.height = h;
   wc.border_width = c->bw;
+  if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next)) ||
+       &monocle == c->mon->lt[c->mon->sellt]->arrange) &&
+      !c->isfullscreen && !c->isfloating) {
+    c->w = wc.width += c->bw * 2;
+    c->h = wc.height += c->bw * 2;
+    wc.border_width = 0;
+  }
   XConfigureWindow(dpy, c->win, CWX | CWY | CWWidth | CWHeight | CWBorderWidth,
                    &wc);
   configure(c);
@@ -3371,10 +3364,10 @@ void zoom(const Arg *arg) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc == 2 && !strcmp("-v", argv[1]))
-    die("dwm-" VERSION);
-  else if (argc != 1)
-    die("usage: dwm [-v]");
+  /* if (argc == 2 && !strcmp("-v", argv[1])) */
+  /*   die("dwm-" VERSION); */
+  /* else if (argc != 1) */
+  /*   die("usage: dwm [-v]"); */
   if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
     fputs("warning: no locale support\n", stderr);
   if (!(dpy = XOpenDisplay(NULL)))

@@ -9,8 +9,8 @@ static const unsigned int systraypinning =
     0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor
           X */
 static const unsigned int systrayspacing = 2; /* systray spacing */
-#define ICONSIZE 18   /* icon size */
-#define ICONSPACING 6 /* space between icon and title */
+#define ICONSIZE 18                           /* icon size */
+#define ICONSPACING 6                         /* space between icon and title */
 static const int systraypinningfailfirst =
     1; /* 1: if pinning fails, display systray on the first monitor, False:
           display systray on the last monitor*/
@@ -28,9 +28,9 @@ static const int topbar = 0;        /* 0 means bottom bar */
 static const Bool viewontag = True; /* Switch view on tag switch */
 static const char *fonts[] = {
     "Nerd Font:size=11:antialias=true:autohint=true",
-    "Hack Nerd Font:size=11:antialias=true:autohint=true",
-    "JoyPixels:size=11:antialias=true:autohint=true",
-    "monospace:size=11:antialias=true:autohint=true",
+    "JetBrainsMono Nerd Font:size=11:antialias=false:autohint=false",
+    "JoyPixels:size=11:antialias=false:autohint=true",
+    "monospace:size=11:antialias=false:autohint=true",
     "Source Code Pro:size=11:antialias=true:autohint=true"};
 static const char dmenufont[] = "SauceCodePro Nerd Font Mono:size=15";
 static const char col_gray1[] = "#3c3836";
@@ -120,24 +120,23 @@ static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = {"st", "-t",     scratchpadname,
                                       "-g", "100x20", NULL};
 
-static const char *upvol[] = {"/home/linus/scripts/vol-up.sh", NULL};
-static const char *downvol[] = {"/home/linus/scripts/vol-down.sh", NULL};
-static const char *mutevol[] = {"/home/linus/scripts/vol-toggle.sh", NULL};
+static const char *upvol[] = {"/home/zz/scripts/vol-up.sh", NULL};
+static const char *downvol[] = {"/home/zz/scripts/vol-down.sh", NULL};
+static const char *mutevol[] = {"/home/zz/scripts/vol-toggle.sh", NULL};
 
-static const char *wpcmd[] = {"/home/linus/scripts/wp-change.sh", NULL};
-static const char *jgmenu[] = {"/home/linus/scripts/jgmenu.sh", NULL};
+static const char *wpcmd[] = {"/home/zz/scripts/wp-change.sh", NULL};
+static const char *jgmenu[] = {"/home/zz/scripts/jgmenu.sh", NULL};
 
-static const char *setcolemakcmd[] = {
-    "/home/linus/scripts/setxmodmap-colemak.sh", NULL};
-static const char *setqwertycmd[] = {"/home/linus/scripts/setxmodmap-qwerty.sh",
+static const char *setcolemakcmd[] = {"/home/zz/scripts/setxmodmap-colemak.sh",
+                                      NULL};
+static const char *setqwertycmd[] = {"/home/zz/scripts/setxmodmap-qwerty.sh",
                                      NULL};
-static const char *trayercmd[] = {"/home/linus/scripts/toggle-trayer.sh",
-                                     NULL};
-static const char *neteasecmd[] = {"/home/linus/scripts/neteasecmd.sh", NULL};
+static const char *trayercmd[] = {"/home/zz/scripts/toggle-trayer.sh", NULL};
+static const char *neteasecmd[] = {"/home/zz/scripts/neteasecmd.sh", NULL};
 
-static const char *suspendcmd[] = {"/home/linus/scripts/suspend.sh", NULL};
+static const char *suspendcmd[] = {"/home/zz/scripts/suspend.sh", NULL};
 
-static const char *screenshot[] = {"/home/linus/scripts/screenshot.sh", NULL};
+static const char *screenshot[] = {"/home/zz/scripts/screenshot.sh", NULL};
 
 static Key keys[] = {
     /* modifier            key                      function        argument */
@@ -147,7 +146,7 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_t, spawn, {.v = trayercmd}},
     {MODKEY, XK_g, spawn, {.v = neteasecmd}},
     {MODKEY | ShiftMask, XK_p, spawn, {.v = suspendcmd}},
-    {MODKEY , XK_j, spawn, {.v = jgmenu}},
+    {MODKEY, XK_j, spawn, {.v = jgmenu}},
     {MODKEY, XK_y, togglescratch, {.v = scratchpadcmd}},
     {0, XF86XK_AudioLowerVolume, spawn, {.v = downvol}},
     {0, XF86XK_AudioMute, spawn, {.v = mutevol}},
@@ -168,7 +167,7 @@ static Key keys[] = {
     {MODKEY, XK_i, viewtoright, {0}},
     {MODKEY | ShiftMask, XK_n, tagtoleft, {0}},
     {MODKEY | ShiftMask, XK_i, tagtoright, {0}},
-    {MODKEY | ShiftMask, XK_g, setlayout, {.v = &layouts[3]}},
+    {MODKEY | ShiftMask, XK_g, setlayout, {.v = &layouts[2]}},
     {MODKEY | ShiftMask, XK_o, setlayout, {.v = &layouts[4]}},
     {MODKEY | ShiftMask, XK_h, incnmaster, {.i = +1}},
     {MODKEY | ShiftMask, XK_l, incnmaster, {.i = -1}},
