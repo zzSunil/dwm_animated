@@ -3113,7 +3113,7 @@ void viewtoleft(const Arg *arg) {
         oldyftag1[i] = cl->y;
         oldwftag1[i] = cl->w;
         oldhftag1[i] = cl->h;
-        dis = 1920 - oldxftag1[i];
+        dis = selmon->mw - oldxftag1[i];
         frames1[i] = (dis / derx);
         if (frames1[i] > Maxframes)
           Maxframes = frames1[i];
@@ -3124,7 +3124,7 @@ void viewtoleft(const Arg *arg) {
         oldyftag2[l] = cl->y;
         oldwftag2[l] = cl->w;
         oldhftag2[l] = cl->h;
-        dis = 1920;
+        dis = selmon->mw;
         frames2[l] = (dis / derx);
         if (frames2[l] > Maxframes)
           Maxframes = frames2[l];
@@ -3199,7 +3199,7 @@ void viewtoright(const Arg *arg) {
         oldyftag2[l] = cl->y;
         oldwftag2[l] = cl->w;
         oldhftag2[l] = cl->h;
-        dis = 1920;
+        dis = selmon->mw;
         frames2[l] = (dis / derx);
         if (frames2[l] > Maxframes)
           Maxframes = frames2[l];
