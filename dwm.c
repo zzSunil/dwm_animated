@@ -273,6 +273,8 @@ static Client *nexttiled(Client *c);
 static void pop(Client *);
 static void toggleMonitor(const Arg *arg);
 static void propertynotify(XEvent *e);
+static void MultiThreadR(const Arg *arg);
+static void MultiThreadL(const Arg *arg);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
 static void removesystrayicon(Client *i);
@@ -350,8 +352,8 @@ static void updateicon(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
-static void viewtoleft(const Arg *arg);
-static void viewtoright(const Arg *arg);
+static void *viewtoleft(void *vdptr);
+static void *viewtoright(void *vdptr);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static Client *wintosystrayicon(Window w);
@@ -3078,8 +3080,8 @@ void view(const Arg *arg) {
 }
 
 // Add motithrads to animation
-void viewtoleft(const Arg *arg) {
-  Monitor *m = selmon;
+void *viewtoleft(void *vdptr) {
+  Monitor *m = vdptr;
   if (m->tagset[m->seltags] != 1) {
     Client *ct1[10];
     Client *ct2[10];
@@ -3152,9 +3154,31 @@ void viewtoleft(const Arg *arg) {
   }
 }
 
+void MultiThreadR(const Arg *arg) {
+  pthread_t mon1thread, mon2thread;
+  Monitor *m1, *m2;
+  m1 = selmon;
+  m2 = m1->next;
+
+  pthread_create(&mon1thread, NULL, viewtoright, (void *)m1);
+  pthread_create(&mon2thread, NULL, viewtoright, (void *)m2);
+  pthread_join(mon2thread, NULL);
+}
+
+void MultiThreadL(const Arg *arg) {
+  pthread_t mon1thread, mon2thread;
+  Monitor *m1, *m2;
+  m1 = selmon;
+  m2 = m1->next;
+
+  pthread_create(&mon1thread, NULL, viewtoright, (void *)m1);
+  pthread_create(&mon2thread, NULL, viewtoright, (void *)m2);
+  pthread_join(mon2thread, NULL);
+}
+
 // Add motithrads to animation
-void viewtoright(const Arg *arg) {
-  Monitor *m = selmon;
+void *viewtoright(void *vdptr) {
+  Monitor *m = vdptr;
   if (m->tagset[m->seltags] != 1 << 8) {
     Client *ct1[10];
     Client *ct2[10];
