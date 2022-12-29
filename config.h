@@ -120,23 +120,24 @@ static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = {"st", "-t",     scratchpadname,
                                       "-g", "100x20", NULL};
 
-static const char *upvol[] = {"/home/zz/scripts/vol-up.sh", NULL};
-static const char *downvol[] = {"/home/zz/scripts/vol-down.sh", NULL};
-static const char *mutevol[] = {"/home/zz/scripts/vol-toggle.sh", NULL};
+static const char *upvol[] = {"/home/zzlinus/scripts/vol-up.sh", NULL};
+static const char *downvol[] = {"/home/zzlinus/scripts/vol-down.sh", NULL};
+static const char *mutevol[] = {"/home/zzlinus/scripts/vol-toggle.sh", NULL};
 
-static const char *wpcmd[] = {"/home/zz/scripts/wp-change.sh", NULL};
-static const char *jgmenu[] = {"/home/zz/scripts/jgmenu.sh", NULL};
+static const char *wpcmd[] = {"/home/zzlinus/scripts/wp-change.sh", NULL};
+static const char *jgmenu[] = {"/home/zzlinus/scripts/jgmenu.sh", NULL};
 
-static const char *setcolemakcmd[] = {"/home/zz/scripts/setxmodmap-colemak.sh",
-                                      NULL};
-static const char *setqwertycmd[] = {"/home/zz/scripts/setxmodmap-qwerty.sh",
-                                     NULL};
-static const char *trayercmd[] = {"/home/zz/scripts/toggle-trayer.sh", NULL};
-static const char *neteasecmd[] = {"/home/zz/scripts/neteasecmd.sh", NULL};
+static const char *setcolemakcmd[] = {
+    "/home/zzlinus/scripts/setxmodmap-colemak.sh", NULL};
+static const char *setqwertycmd[] = {
+    "/home/zzlinus/scripts/setxmodmap-qwerty.sh", NULL};
+static const char *trayercmd[] = {"/home/zzlinus/scripts/toggle-trayer.sh",
+                                  NULL};
+static const char *neteasecmd[] = {"/home/zzlinus/scripts/neteasecmd.sh", NULL};
 
-static const char *suspendcmd[] = {"/home/zz/scripts/suspend.sh", NULL};
+static const char *suspendcmd[] = {"/home/zzlinus/scripts/suspend.sh", NULL};
 
-static const char *screenshot[] = {"/home/zz/scripts/screenshot.sh", NULL};
+static const char *screenshot[] = {"/home/zzlinus/scripts/screenshot.sh", NULL};
 
 static Key keys[] = {
     /* modifier            key                      function        argument */
