@@ -113,8 +113,8 @@ static char dmenumon[2] =
 static const char *dmenucmd[] = {
     "dmenu_run", "-m",      dmenumon, "-fn",    dmenufont, "-nb",     col_gray1,
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
-static const char *termcmd[] = {"alacritty", NULL};
-static const char *browsercmd[] = {"firefox", NULL};
+static const char *termcmd[] = {"kitty", NULL};
+static const char *browsercmd[] = {"microsoft-edge-stable", NULL};
 
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = {"st", "-t",     scratchpadname,
@@ -165,6 +165,7 @@ static Key keys[] = {
     {MODKEY, XK_u, focusstack, {.i = -1}},
     {MODKEY, XK_n, viewtoleft, {0}},
     {MODKEY, XK_w, toggleMonitor, {0}},
+    {MODKEY | ShiftMask, XK_w, switchToggleMons, {0}},
     {MODKEY, XK_i, viewtoright, {0}},
     {MODKEY | ShiftMask, XK_n, tagtoleft, {0}},
     {MODKEY | ShiftMask, XK_i, tagtoright, {0}},

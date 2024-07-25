@@ -260,6 +260,8 @@ static void grabbuttons(Client *c, int focused);
 static void freeicon(Client *c);
 static void grabkeys(void);
 static void hide(Client *c);
+
+int issinglewin(const Arg *arg);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
@@ -272,6 +274,7 @@ static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
 static void pop(Client *);
 static void toggleMonitor(const Arg *arg);
+void switchToggleMons(const Arg *arg);
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
@@ -398,14 +401,14 @@ static Cur *cursor[CurLast];
 static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
-static Monitor *mons, *selmon;
+static uint8_t has_prevmon = 0;
+static Monitor *mons, *selmon, *prevmon;
 static Window root, wmcheckwin;
 
 static int useargb = 0;
 static Visual *visual;
 static int depth;
 static Colormap cmap;
-static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
 
 #define hiddenWinStackMax 100
@@ -3339,16 +3342,45 @@ void xinitvisual() {
   }
 }
 
-void toggleMonitor(const Arg *arg) {
-  Monitor *m;
-  for (m = mons; m; m = m->next) {
+void init_prevmon() {
+  prevmon = selmon;
+  for (Monitor *m = mons; m; m = m->next) {
     if (m != selmon) {
-      unfocus(selmon->sel, 0);
-      selmon = m;
-      focus(NULL);
+      prevmon = m;
       break;
     }
   }
+}
+
+void refresh_focus(void) {
+  Monitor *tmp_m;
+  unfocus(selmon->sel, 0);
+  tmp_m = selmon;
+  selmon = prevmon;
+  prevmon = tmp_m;
+  focus(NULL);
+}
+
+void toggleMonitor(const Arg *arg) {
+  if (!has_prevmon) {
+    init_prevmon();
+    has_prevmon = 1;
+  }
+  refresh_focus();
+}
+
+void switchToggleMons(const Arg *arg) {
+  if (!has_prevmon) {
+    has_prevmon = 1;
+    init_prevmon();
+  }
+  for (Monitor *m = mons; m; m = m->next) {
+    if (m != selmon && m != prevmon) {
+      prevmon = m;
+      break;
+    }
+  }
+  refresh_focus();
 }
 
 void zoom(const Arg *arg) {
